@@ -18,7 +18,11 @@ export class CourseEditorComponent implements OnInit {
   }
 
   saveCourse() {
-    this.courseStateService.saveCourse(this.course);
+    if (this.course.id === 0) {
+      this.courseStateService.createCourse(this.course);
+    } else {
+      this.courseStateService.saveCourse(this.course);
+    }
   }
 
   textChange(value: string, key: string) {
