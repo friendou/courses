@@ -1,10 +1,24 @@
 <div class="textbook-editor-body">
   <div class="textbook-editor-buttons">
-    <button mat-icon-button aria-label="Example icon-button with a heart icon" matTooltip="Save changes" (click)="saveTextbook()">
+    <button 
+      mat-icon-button 
+      matTooltip="Save changes"
+      [disabled]="courseId===0"
+      (click)="saveTextbook()">
       <mat-icon>save</mat-icon>
     </button>
-    <button mat-icon-button aria-label="Example icon-button with a heart icon" matTooltip="Discard changes" (click)="discardChangesToTextbook()">
+    <button 
+      mat-icon-button 
+      matTooltip="Discard changes" 
+      [disabled]="courseId===0"
+      (click)="discardChangesToTextbook()">
       <mat-icon>settings_backup_restore</mat-icon>
+    </button>
+    <button 
+      mat-icon-button 
+      matTooltip="Remove textbook" 
+      (click)="deleteTextbook()">
+      <mat-icon>delete</mat-icon>
     </button>
   </div>
   <mat-form-field>
