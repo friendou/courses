@@ -1,0 +1,15 @@
+.course-editor-body {
+    display: flex;
+    flex-flow: column;
+}
+
+.course-editor-buttons {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.course-editor-textbooks-container {
+    display: flex;
+    flex-flow: column;
+    margin-left: 32px;
+}
