@@ -22,8 +22,8 @@ export class TextbookEditorComponent implements OnInit {
     this.courseStateService.changeTextbook(this.courseId, this.textbook.author, value, key);
   }
 
-  saveChanges() {
-
+  saveTextbook() {
+    // this.courseStateService.saveTextbook();
   }
 
   discardChangesToTextbook() {
