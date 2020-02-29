@@ -26,6 +26,25 @@ export class CoursesService {
           title: 'Public Relations'
         }
       ]
+    },
+    {
+      id: 2,
+      name: 'Calculus',
+      description: 'Learn about calculus',
+      textbooks: [
+        {
+          author: 'Joe Smith',
+          title: 'Calculus 1'
+        },
+        {
+          author: 'Eli Hinnegan',
+          title: 'Calculus for begginers'
+        },
+        {
+          author: 'Edward Bernays',
+          title: 'Introduction to calculus'
+        }
+      ]
     }
   ];
 
@@ -33,6 +52,12 @@ export class CoursesService {
 
   getCourses(): Observable<ICourse[]> {
     return of(this.courses);
+  }
+
+  putCourse(course: ICourse): Observable<ICourse> {
+    const index = this.courses.findIndex((c) => c.id === course.id);
+    this.courses.splice(index, 1, course);
+    return of(course);
   }
 
 }
