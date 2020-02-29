@@ -1,4 +1,5 @@
-import { ICourse } from 'src/app/modules/courses/models/ICourses';
+import { ICourse } from '../../../modules/courses/models/ICourses';
+import { ITextbook } from '../../../modules/courses/models/ITextbook';
 
 export class SaveCourse {
   static readonly type = '[Courses] Save';
@@ -10,9 +11,9 @@ export class ChangeCourse {
   constructor(public payload: {course: ICourse, value: string, key: string}) { }
 }
 
-export class SaveTextbox {
-  static readonly type = '[Textbook] Change';
-  constructor(public payload: ICourse) { }
+export class SaveTextbook {
+  static readonly type = '[Textbook] Save';
+  constructor(public payload: {courseId: number, textbook: ITextbook, index: number}) { }
 }
 
 export class ChangeTextbook {
@@ -47,4 +48,19 @@ export class AddCourse {
 export class CreateCourse {
   static readonly type = '[Courses] Create';
   constructor(public payload: ICourse) { }
+}
+
+export class AddTextbook {
+  static readonly type = '[Textbook] Add';
+  constructor(public payload: number) { }
+}
+
+export class RemoveTextbook {
+  static readonly type = '[Textbook] Remove';
+  constructor(public payload: {courseId: number, index: number}) { }
+}
+
+export class DeleteCourse {
+  static readonly type = '[Courses] Delete';
+  constructor(public payload: number) { }
 }
