@@ -1,10 +1,11 @@
-import { State, Action, StateContext, Selector, ofActionCompleted } from '@ngxs/store';
+import { State, Action, StateContext, Selector } from '@ngxs/store';
 import * as CourseActions from './courses.actions';
 import { ICourse } from 'src/app/modules/courses/models/ICourses';
 import { CoursesService } from 'src/app/modules/courses/components/courses/courses.service';
 import { Injectable } from '@angular/core';
 import { cloneDeep } from 'lodash';
 import { take } from 'rxjs/operators';
+import { ITextbook } from 'src/app/modules/courses/models/ITextbook';
 
 export interface ICoursesState {
   courses: ICourse[];
@@ -37,7 +38,7 @@ export class CoursesState {
   }
 
   @Action(CourseActions.SaveCourse)
-  private SaveCourse({ getState, patchState }: StateContext<ICoursesState>, action: CourseActions.SaveCourse) {
+  private SaveCourse({ getState }: StateContext<ICoursesState>, action: CourseActions.SaveCourse) {
     const state = getState();
     const changedCourse = action.payload;
     const coursePosition = state.courses.findIndex((course) => course.id === changedCourse.id);
@@ -71,7 +72,7 @@ export class CoursesState {
   }
 
   @Action(CourseActions.SetCourses)
-  private SetCourses({ getState, patchState }: StateContext<ICoursesState>, action: CourseActions.SetCourses) {
+  private SetCourses({ patchState }: StateContext<ICoursesState>, action: CourseActions.SetCourses) {
     patchState({courses: action.payload});
   }
 
@@ -114,10 +115,7 @@ export class CoursesState {
       id: 0,
       description: '',
       name: '',
-      textbooks: [{
-        author: '',
-        title: ''
-      }]
+      textbooks: []
     } 
     const courses = cloneDeep(state.courses);
     courses.push(newCourse);
@@ -132,6 +130,65 @@ export class CoursesState {
     const newCourse = action.payload;
     this.coursesService.postCourse(newCourse).pipe(take(1)).subscribe((course) => {
       courses.push(course)
+      patchState({courses});
+    });
+  }
+
+  @Action(CourseActions.SaveTextbook)
+  private SaveTextbook({ getState }: StateContext<ICoursesState>, action: CourseActions.SaveTextbook) {
+    const state = getState();
+    const { courseId, textbook, index } = action.payload;
+    const course = state.backupCourses.find((c) => c.id === courseId);
+
+    const updatedCourse: ICourse = cloneDeep(course);
+    updatedCourse.textbooks[index] = textbook;
+
+    this.coursesService.putCourse(updatedCourse);
+  }
+
+  @Action(CourseActions.AddTextbook)
+  private AddTextbook({ getState, patchState }: StateContext<ICoursesState>, action: CourseActions.AddTextbook) {
+    const state = getState();
+    const courseId = action.payload;
+    const newTextbook: ITextbook = {
+      author: '',
+      title: ''
+    } 
+    const courses = cloneDeep(state.courses);
+    const index = courses.findIndex(c => c.id === courseId)
+    const updatedCourse = cloneDeep(courses[index]);
+    updatedCourse.textbooks.push(newTextbook);
+    
+    courses[index] = updatedCourse;
+
+    patchState({courses});
+  }
+
+  @Action(CourseActions.RemoveTextbook)
+  private RemoveTextbook({ getState, patchState }: StateContext<ICoursesState>, action: CourseActions.RemoveTextbook) {
+    const state = getState();
+    const { courseId, index } = action.payload;
+     
+    const courses = cloneDeep(state.courses);
+    const courseIndex = courses.findIndex(c => c.id === courseId);
+    const updatedCourse = cloneDeep(courses[courseIndex]);
+    updatedCourse.textbooks.splice(index, 1);
+    
+    courses[courseIndex] = updatedCourse;
+
+    patchState({courses});
+  }
+
+  @Action(CourseActions.DeleteCourse)
+  private DeleteCourse({ getState, patchState }: StateContext<ICoursesState>, action: CourseActions.DeleteCourse) {    
+    const state = getState();
+    const courseId = action.payload;
+     
+    const courses = cloneDeep(state.courses);
+    const courseIndex = courses.findIndex(c => c.id === courseId);
+    courses.splice(courseIndex, 1);
+
+    this.coursesService.deleteCourse(courseId).subscribe((course) => {
       patchState({courses});
     });
   }
