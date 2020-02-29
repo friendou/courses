@@ -26,7 +26,6 @@ export class CoursesComponent implements OnInit {
       });
 
     this.courses$ = this.coursesStateService.courses$;
-    this.coursesStateService.courses$.subscribe(d => console.log(d));
   }
 
   addCourse() {
