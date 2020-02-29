@@ -68,13 +68,23 @@ export class CoursesService {
   }
 
   postCourse(course: ICourse): Observable<ICourse> {
-    var courses = cloneDeep(this.courses);
+    const courses = cloneDeep(this.courses);
     const newCourse = cloneDeep(course)
-    newCourse.id = this.courses.length;
+    newCourse.id = this.courses.length + 1;
     courses.push(newCourse);
     this.courses = courses;
     localStorage.setItem('a',JSON.stringify(this.courses))
     return of(course)
   }
 
+  deleteCourse(courseId: number): Observable<ICourse> {
+    const courses = cloneDeep(this.courses);
+    const courseIndex = courses.findIndex(c => c.id === courseId);
+
+    const deletedCourse = courses.splice(courseIndex, 1);
+
+    this.courses = courses;
+    localStorage.setItem('a',JSON.stringify(this.courses))
+    return of(this.deleteCourse[0]);
+  }
 }
