@@ -6,7 +6,8 @@ import {
   SetBackupCourses,
   SetCourses,
   ChangeCourse,
-  ChangeTextbook
+  ChangeTextbook,
+  RestoreTextbook
 } from './courses.actions';
 import { ICourse } from 'src/app/modules/courses/models/ICourses';
 import { CoursesState } from './courses.state';
@@ -16,32 +17,36 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class CoursesStateService {
-  @Select(CoursesState.courses) public courses$: Observable<ICourse[]>;
-  @Select(CoursesState.backupCourses) public backupCourses$: Observable<ICourse[]>;
+  @Select(CoursesState.courses) courses$: Observable<ICourse[]>;
+  @Select(CoursesState.backupCourses) backupCourses$: Observable<ICourse[]>;
 
   constructor(private store: Store) {}
 
-  public saveCourse(course: ICourse) {
+ saveCourse(course: ICourse) {
     this.store.dispatch(new SaveCourse(course));
   }
 
-  public changeCourse(course: ICourse, value: string, key: string) {
+  changeCourse(course: ICourse, value: string, key: string) {
     this.store.dispatch(new ChangeCourse({course, value, key}));
   }
 
-  public restoreCourse(course: ICourse) {
+  restoreCourse(course: number) {
     this.store.dispatch(new RestoreCourse(course));
   }
 
-  public setCourses(courses: ICourse[]) {
+  setCourses(courses: ICourse[]) {
     this.store.dispatch(new SetCourses(courses));
   }
 
-  public setBackupCourses(courses: ICourse[]) {
+  setBackupCourses(courses: ICourse[]) {
     this.store.dispatch(new SetBackupCourses(courses));
   }
 
-  public changeTextbook(courseId: number, author: string, value: string, key: string) {
+  changeTextbook(courseId: number, author: string, value: string, key: string) {
     this.store.dispatch(new ChangeTextbook({courseId, author, value, key}));
+  }
+
+  restoreTextbook(courseId: number, index: number) {
+    this.store.dispatch(new RestoreTextbook({courseId, index}));
   }
 }
