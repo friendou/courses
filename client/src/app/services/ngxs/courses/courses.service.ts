@@ -7,7 +7,9 @@ import {
   SetCourses,
   ChangeCourse,
   ChangeTextbook,
-  RestoreTextbook
+  RestoreTextbook,
+  AddCourse,
+  CreateCourse
 } from './courses.actions';
 import { ICourse } from 'src/app/modules/courses/models/ICourses';
 import { CoursesState } from './courses.state';
@@ -22,7 +24,7 @@ export class CoursesStateService {
 
   constructor(private store: Store) {}
 
- saveCourse(course: ICourse) {
+  saveCourse(course: ICourse) {
     this.store.dispatch(new SaveCourse(course));
   }
 
@@ -48,5 +50,13 @@ export class CoursesStateService {
 
   restoreTextbook(courseId: number, index: number) {
     this.store.dispatch(new RestoreTextbook({courseId, index}));
+  }
+
+  addCourse() {
+    this.store.dispatch(new AddCourse());
+  }
+
+  createCourse(course: ICourse) {
+    this.store.dispatch(new CreateCourse(course));
   }
 }
