@@ -23,11 +23,15 @@ export class TextbookEditorComponent implements OnInit {
   }
 
   saveTextbook() {
-    // this.courseStateService.saveTextbook();
+    this.courseStateService.saveTextbook(this.courseId, this.textbook, this.index);
   }
 
   discardChangesToTextbook() {
     this.courseStateService.restoreTextbook(this.courseId, this.index);
+  }
+
+  deleteTextbook() {
+    this.courseStateService.removeTextbook(this.courseId, this.index);
   }
 
 }
