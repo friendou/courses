@@ -1,20 +1,30 @@
 
-<mat-accordion class="card-editor-accordion">
-  <mat-expansion-panel>
-    <mat-expansion-panel-header>
-      <mat-panel-title>
-        {{course.name}}
-      </mat-panel-title>
-    </mat-expansion-panel-header>
-
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>
+      {{course.name}}
+    </mat-card-title>
+  </mat-card-header>
+  <div class="course-editor-body">
+    <div class="course-editor-buttons">
+      <button mat-icon-button matTooltip="Save changes to course" (click)="saveCourse()">
+        <mat-icon>save</mat-icon>
+      </button>
+      <button mat-icon-button matTooltip="Discard changes to course" (click)="restoreCourse()">
+        <mat-icon>settings_backup_restore</mat-icon>
+      </button>
+    </div>
     <mat-form-field>
-      <mat-label>Title</mat-label>
-      <input matInput [value]="course.name">
+      <mat-label>Name</mat-label>
+      <input matInput [value]="course.name" (blur)="textChange($event.target.value, 'name')">
     </mat-form-field>
-    <br />
     <mat-form-field>
       <mat-label>Description</mat-label>
-      <input matInput [value]="course.description">
-    </mat-form-field>  
-  </mat-expansion-panel>
-</mat-accordion>
+      <input matInput [value]="course.description" (blur)="textChange($event.target.value, 'description')">
+    </mat-form-field>
+    <h1>Textbooks</h1>
+    <div class="course-editor-textbooks-container">
+      <app-textbook-editor *ngFor="let textbook of course.textbooks; let i = index" [textbook]="textbook" [courseId]="course.id" [index]="i" ></app-textbook-editor>
+    </div>
+  </div>
+</mat-card>
