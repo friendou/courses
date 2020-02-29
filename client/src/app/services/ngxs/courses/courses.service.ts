@@ -9,11 +9,16 @@ import {
   ChangeTextbook,
   RestoreTextbook,
   AddCourse,
-  CreateCourse
+  CreateCourse,
+  SaveTextbook,
+  AddTextbook,
+  RemoveTextbook,
+  DeleteCourse
 } from './courses.actions';
 import { ICourse } from 'src/app/modules/courses/models/ICourses';
 import { CoursesState } from './courses.state';
 import { Observable } from 'rxjs';
+import { ITextbook } from 'src/app/modules/courses/models/ITextbook';
 
 @Injectable({
   providedIn: 'root'
@@ -58,5 +63,21 @@ export class CoursesStateService {
 
   createCourse(course: ICourse) {
     this.store.dispatch(new CreateCourse(course));
+  }
+
+  saveTextbook(courseId: number, textbook: ITextbook, index: number) {
+    this.store.dispatch(new SaveTextbook({courseId, textbook, index}));
+  }
+
+  addTextbook(courseId: number) {
+    this.store.dispatch(new AddTextbook(courseId));
+  }
+
+  removeTextbook(courseId: number, index: number) {
+    this.store.dispatch(new RemoveTextbook({courseId, index}));
+  }
+
+  deleteCourse(courseId: number) {
+    this.store.dispatch(new DeleteCourse(courseId));
   }
 }
