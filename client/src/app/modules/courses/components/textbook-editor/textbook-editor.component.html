@@ -1,0 +1,18 @@
+<div class="textbook-editor-body">
+  <div class="textbook-editor-buttons">
+    <button mat-icon-button aria-label="Example icon-button with a heart icon" matTooltip="Save changes" (click)="saveTextbook()">
+      <mat-icon>save</mat-icon>
+    </button>
+    <button mat-icon-button aria-label="Example icon-button with a heart icon" matTooltip="Discard changes" (click)="discardChangesToTextbook()">
+      <mat-icon>settings_backup_restore</mat-icon>
+    </button>
+  </div>
+  <mat-form-field>
+    <mat-label>Author</mat-label>
+    <input matInput [value]="textbook.author" (blur)="textChange($event.target.value, 'author')">
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Title</mat-label>
+    <input matInput [value]="textbook.title" (blur)="textChange($event.target.value, 'title')">
+  </mat-form-field>
+</div>
