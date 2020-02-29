@@ -22,17 +22,12 @@ export class ChangeTextbook {
 
 export class RestoreCourse {
   static readonly type = '[Courses] Restore';
-  constructor(public payload: ICourse) { }
+  constructor(public payload: number) { }
 }
 
 export class RestoreTextbook {
   static readonly type = '[Textbook] Restore';
-  constructor(public payload: {courseId: number, author: string}) { }
-}
-
-export class RestoreTextbox {
-  static readonly type = '[Textbook] Restore';
-  constructor(public payload: ICourse) { }
+  constructor(public payload: {courseId: number, index: number}) { }
 }
 
 export class SetCourses {
