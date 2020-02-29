@@ -48,21 +48,27 @@ export class CoursesState {
   @Action(CourseActions.RestoreCourse)
   private RestoreCourse({ getState, patchState }: StateContext<ICoursesState>, action: CourseActions.RestoreCourse) {
     const state = getState();
-    const changedCourse = action.payload;
-    const restoredCourse = state.backupCourses.find((course) => course.id === changedCourse.id);
-    const restoringCoursePosition = state.courses.findIndex((course) => course.id === changedCourse.id);
-    const newState = state.courses.splice(restoringCoursePosition, 1, restoredCourse);
-    patchState({courses: newState});
+    const courseId = action.payload;
+    const backupCourses = state.backupCourses;
+    const courses = cloneDeep(state.courses);
+    const courseToRestore = backupCourses.find((c) => c.id === courseId);
+
+    const coursePosition = courses.findIndex((c) => c.id === courseId);
+    courses[coursePosition] = courseToRestore;
+    patchState({courses});
   }
 
-  @Action(CourseActions.RestoreCourse)
-  private RestoreTextbook({ getState, patchState }: StateContext<ICoursesState>, action: CourseActions.RestoreCourse) {
+  @Action(CourseActions.RestoreTextbook)
+  private RestoreTextbook({ getState, patchState }: StateContext<ICoursesState>, action: CourseActions.RestoreTextbook) {
     const state = getState();
-    const changedCourse = action.payload;
-    const restoredCourse = state.backupCourses.find((course) => course.id === changedCourse.id);
-    const restoringCoursePosition = state.courses.findIndex((course) => course.id === changedCourse.id);
-    const newState = state.courses.splice(restoringCoursePosition, 1, restoredCourse);
-    patchState({courses: newState});
+    const { courseId, index } = action.payload;
+    const backupCourses = state.backupCourses;
+    const courses = cloneDeep(state.courses);
+    const backupCourse = backupCourses.find((c) => c.id === courseId);
+    const textbookToRestore = backupCourse.textbooks[index];
+    const coursePosition = courses.findIndex((c) => c.id === courseId);
+    courses[coursePosition].textbooks[index] = textbookToRestore;
+    patchState({courses});
   }
 
   @Action(CourseActions.SetCourses)
