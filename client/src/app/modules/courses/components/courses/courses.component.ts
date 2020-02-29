@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { CoursesService } from './courses.service';
 import { ICourse } from '../../models/ICourses';
 import { Observable, } from 'rxjs';
-import { tap } from 'rxjs/operators';
 import { CoursesStateService } from 'src/app/services/ngxs/courses/courses.service';
 
 @Component({
@@ -27,5 +26,10 @@ export class CoursesComponent implements OnInit {
       });
 
     this.courses$ = this.coursesStateService.courses$;
+    this.coursesStateService.courses$.subscribe(d => console.log(d));
+  }
+
+  addCourse() {
+    this.coursesStateService.addCourse();
   }
 }
