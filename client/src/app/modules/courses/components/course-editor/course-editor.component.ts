@@ -30,6 +30,16 @@ export class CourseEditorComponent implements OnInit {
   }
 
   restoreCourse() {
-    this.courseStateService.restoreCourse(this.course.id);
+    if (this.course.id !== 0) {
+      this.courseStateService.restoreCourse(this.course.id);
+    }
+  }
+
+  addTextbook() {
+    this.courseStateService.addTextbook(this.course.id);
+  }
+
+  deleteCourse() {
+    this.courseStateService.deleteCourse(this.course.id);
   }
 }
