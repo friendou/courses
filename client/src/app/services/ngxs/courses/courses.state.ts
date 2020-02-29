@@ -1,9 +1,10 @@
-import { State, Action, StateContext, Selector } from '@ngxs/store';
+import { State, Action, StateContext, Selector, ofActionCompleted } from '@ngxs/store';
 import * as CourseActions from './courses.actions';
 import { ICourse } from 'src/app/modules/courses/models/ICourses';
 import { CoursesService } from 'src/app/modules/courses/components/courses/courses.service';
 import { Injectable } from '@angular/core';
 import { cloneDeep } from 'lodash';
+import { take } from 'rxjs/operators';
 
 export interface ICoursesState {
   courses: ICourse[];
@@ -40,9 +41,7 @@ export class CoursesState {
     const state = getState();
     const changedCourse = action.payload;
     const coursePosition = state.courses.findIndex((course) => course.id === changedCourse.id);
-    const newState = state.courses.splice(coursePosition, 1, changedCourse);
-    this.coursesService.putCourse(action.payload);
-    patchState({courses: newState});
+    this.coursesService.putCourse(state.courses[coursePosition]);
   }
 
   @Action(CourseActions.RestoreCourse)
@@ -106,5 +105,34 @@ export class CoursesState {
     const newState: ICourse[] = cloneDeep(state.courses);
     newState[coursePosition] =  newCourse;
     patchState({courses: newState});
+  }
+
+  @Action(CourseActions.AddCourse)
+  private AddCourse({ getState, patchState }: StateContext<ICoursesState>) {
+    const state = getState();
+    const newCourse: ICourse = {
+      id: 0,
+      description: '',
+      name: '',
+      textbooks: [{
+        author: '',
+        title: ''
+      }]
+    } 
+    const courses = cloneDeep(state.courses);
+    courses.push(newCourse);
+
+    patchState({courses});
+  }
+
+  @Action(CourseActions.CreateCourse)
+  private CreateCourse({ getState, patchState }: StateContext<ICoursesState>, action: CourseActions.CreateCourse) {
+    const state = getState();
+    const courses = cloneDeep(state.courses);
+    const newCourse = action.payload;
+    this.coursesService.postCourse(newCourse).pipe(take(1)).subscribe((course) => {
+      courses.push(course)
+      patchState({courses});
+    });
   }
 }
