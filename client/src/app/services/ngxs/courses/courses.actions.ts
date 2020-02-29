@@ -39,3 +39,12 @@ export class SetBackupCourses {
   static readonly type = '[Courses] Set Backup Courses';
   constructor(public payload: ICourse[]) { }
 }
+
+export class AddCourse {
+  static readonly type = '[Courses] Add';
+}
+
+export class CreateCourse {
+  static readonly type = '[Courses] Create';
+  constructor(public payload: ICourse) { }
+}
