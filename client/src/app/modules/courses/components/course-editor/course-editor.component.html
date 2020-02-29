@@ -7,11 +7,24 @@
   </mat-card-header>
   <div class="course-editor-body">
     <div class="course-editor-buttons">
-      <button mat-icon-button matTooltip="Save changes to course" (click)="saveCourse()">
+      <button 
+        mat-icon-button
+        matTooltip="Save changes to course"
+        (click)="saveCourse()">
         <mat-icon>save</mat-icon>
       </button>
-      <button mat-icon-button matTooltip="Discard changes to course" (click)="restoreCourse()">
+      <button 
+        mat-icon-button 
+        matTooltip="Discard changes to course" 
+        [disabled]="course.id === 0"
+        (click)="restoreCourse()">
         <mat-icon>settings_backup_restore</mat-icon>
+      </button>
+      <button 
+        mat-icon-button 
+        matTooltip="Delete course"
+        (click)="deleteCourse()">
+        <mat-icon>delete</mat-icon>
       </button>
     </div>
     <mat-form-field>
@@ -24,7 +37,15 @@
     </mat-form-field>
     <h1>Textbooks</h1>
     <div class="course-editor-textbooks-container">
-      <app-textbook-editor *ngFor="let textbook of course.textbooks; let i = index" [textbook]="textbook" [courseId]="course.id" [index]="i" ></app-textbook-editor>
+      <app-textbook-editor 
+        *ngFor="let textbook of course.textbooks; let i = index" 
+        [textbook]="textbook" 
+        [courseId]="course.id" 
+        [index]="i" >
+      </app-textbook-editor>
+      <div class="add-textbook-button-container">   
+        <button mat-raised-button class="add-textbook" color="primary" (click)="addTextbook()">Add textbook</button>
+      </div>
     </div>
   </div>
 </mat-card>
