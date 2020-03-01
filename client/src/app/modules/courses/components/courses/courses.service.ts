@@ -2,60 +2,19 @@ import { Injectable } from '@angular/core';
 import { ICourse } from '../../models/ICourses';
 import { Observable, of } from 'rxjs';
 import { cloneDeep } from 'lodash';
+import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CoursesService {
-
-  private courses: ICourse[] = [
-    {
-      id: 1,
-      name: 'Introduction to advertising',
-      description: 'Learn about advertising',
-      textbooks: [
-        {
-          author: 'Joe Smith',
-          title: 'Mobile advertising fundamentals'
-        },
-        {
-          author: 'Eli Hinnegan',
-          title: 'Introduction to Location-Based Advertising'
-        },
-        {
-          author: 'Edward Bernays',
-          title: 'Public Relations'
-        }
-      ]
-    },
-    {
-      id: 2,
-      name: 'Calculus',
-      description: 'Learn about calculus',
-      textbooks: [
-        {
-          author: 'Joe Smith',
-          title: 'Calculus 1'
-        },
-        {
-          author: 'Eli Hinnegan',
-          title: 'Calculus for begginers'
-        },
-        {
-          author: 'Edward Bernays',
-          title: 'Introduction to calculus'
-        }
-      ]
-    }
-  ];
-
-  constructor() {}
+  courses = [];
+  private resource = 'course';
+  constructor(private client: HttpClient) {}
 
   getCourses(): Observable<ICourse[]> {
-    const string = localStorage.getItem('a');
-    const json = JSON.parse(string);
-    this.courses = json;
-    return of(json);
+    return this.client.get<ICourse[]>(`${environment.serverUrl}${this.resource}`);
   }
 
   putCourse(course: ICourse): Observable<ICourse> {
