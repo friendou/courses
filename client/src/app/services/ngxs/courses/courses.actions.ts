@@ -8,17 +8,17 @@ export class SaveCourse {
 
 export class ChangeCourse {
   static readonly type = '[Courses] Change';
-  constructor(public payload: {course: ICourse, value: string, key: string}) { }
+  constructor(public payload: { course: ICourse, value: string, key: string, index: number }) { }
 }
 
 export class SaveTextbook {
   static readonly type = '[Textbook] Save';
-  constructor(public payload: {courseId: number, textbook: ITextbook, index: number}) { }
+  constructor(public payload: { courseId: number, textbook: ITextbook, index: number }) { }
 }
 
 export class ChangeTextbook {
   static readonly type = '[Textbook] Change';
-  constructor(public payload: {courseId: number, author: string, value: string, key: string}) { }
+  constructor(public payload: { courseId: number, author: string, value: string, key: string }) { }
 }
 
 export class RestoreCourse {
