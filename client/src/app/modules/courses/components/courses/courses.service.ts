@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ICourse } from '../../models/ICourses';
-import { Observable, of } from 'rxjs';
-import { cloneDeep } from 'lodash';
+import { Observable } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../../../../environments/environment';
 
@@ -18,32 +17,14 @@ export class CoursesService {
   }
 
   putCourse(course: ICourse): Observable<ICourse> {
-    const index = this.courses.findIndex((c) => c.id === course.id);
-    const courses = cloneDeep(this.courses);
-    courses[index] = course;
-    this.courses = courses;
-    localStorage.setItem('a',JSON.stringify(this.courses))
-    return of(course);
+    return this.client.put<ICourse>(`${environment.serverUrl}${this.resource}/${course.id}`, course);
   }
 
   postCourse(course: ICourse): Observable<ICourse> {
-    const courses = cloneDeep(this.courses);
-    const newCourse = cloneDeep(course)
-    newCourse.id = this.courses.length + 1;
-    courses.push(newCourse);
-    this.courses = courses;
-    localStorage.setItem('a',JSON.stringify(this.courses))
-    return of(course)
+    return this.client.post<ICourse>(`${environment.serverUrl}${this.resource}`, course);
   }
 
   deleteCourse(courseId: number): Observable<ICourse> {
-    const courses = cloneDeep(this.courses);
-    const courseIndex = courses.findIndex(c => c.id === courseId);
-
-    const deletedCourse = courses.splice(courseIndex, 1);
-
-    this.courses = courses;
-    localStorage.setItem('a',JSON.stringify(this.courses))
-    return of(this.deleteCourse[0]);
+    return this.client.delete<ICourse>(`${environment.serverUrl}${this.resource}/${courseId}`);
   }
 }
