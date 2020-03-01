@@ -33,8 +33,8 @@ export class CoursesStateService {
     this.store.dispatch(new SaveCourse(course));
   }
 
-  changeCourse(course: ICourse, value: string, key: string) {
-    this.store.dispatch(new ChangeCourse({course, value, key}));
+  changeCourse(course: ICourse, value: string, key: string, index: number) {
+    this.store.dispatch(new ChangeCourse({ course, value, key, index }));
   }
 
   restoreCourse(course: number) {
@@ -50,11 +50,11 @@ export class CoursesStateService {
   }
 
   changeTextbook(courseId: number, author: string, value: string, key: string) {
-    this.store.dispatch(new ChangeTextbook({courseId, author, value, key}));
+    this.store.dispatch(new ChangeTextbook({ courseId, author, value, key }));
   }
 
   restoreTextbook(courseId: number, index: number) {
-    this.store.dispatch(new RestoreTextbook({courseId, index}));
+    this.store.dispatch(new RestoreTextbook({ courseId, index }));
   }
 
   addCourse() {
@@ -66,7 +66,7 @@ export class CoursesStateService {
   }
 
   saveTextbook(courseId: number, textbook: ITextbook, index: number) {
-    this.store.dispatch(new SaveTextbook({courseId, textbook, index}));
+    this.store.dispatch(new SaveTextbook({ courseId, textbook, index }));
   }
 
   addTextbook(courseId: number) {
@@ -74,7 +74,7 @@ export class CoursesStateService {
   }
 
   removeTextbook(courseId: number, index: number) {
-    this.store.dispatch(new RemoveTextbook({courseId, index}));
+    this.store.dispatch(new RemoveTextbook({ courseId, index }));
   }
 
   deleteCourse(courseId: number) {
