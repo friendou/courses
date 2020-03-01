@@ -42,7 +42,7 @@ export class CoursesState {
     const state = getState();
     const changedCourse = action.payload;
     const coursePosition = state.courses.findIndex((course) => course.id === changedCourse.id);
-    this.coursesService.putCourse(state.courses[coursePosition]);
+    this.coursesService.putCourse(state.courses[coursePosition]).pipe(take(1)).subscribe(() => {});
   }
 
   @Action(CourseActions.RestoreCourse)
@@ -84,11 +84,10 @@ export class CoursesState {
   @Action(CourseActions.ChangeCourse)
   private ChangeCourse({ getState, patchState }: StateContext<ICoursesState>, action: CourseActions.ChangeCourse) {
     const state = getState();
-    const { course, value, key } = action.payload;
-    const coursePosition = state.courses.findIndex((c) => c.id === course.id);
+    const { course, value, key , index } = action.payload;
     const newCourse = {...course, [key]: value};
     const newState: ICourse[] = cloneDeep(state.courses);
-    newState[coursePosition] =  newCourse;
+    newState[index] =  newCourse;
     patchState({courses: newState});
   }
 
@@ -116,7 +115,7 @@ export class CoursesState {
       description: '',
       name: '',
       textbooks: []
-    } 
+    };
     const courses = cloneDeep(state.courses);
     courses.push(newCourse);
 
@@ -126,11 +125,18 @@ export class CoursesState {
   @Action(CourseActions.CreateCourse)
   private CreateCourse({ getState, patchState }: StateContext<ICoursesState>, action: CourseActions.CreateCourse) {
     const state = getState();
-    const courses = cloneDeep(state.courses);
-    const newCourse = action.payload;
+    const backupCourses = cloneDeep(state.backupCourses);
+    const newCourse = cloneDeep(action.payload);
+    let newId = 0;
+    backupCourses.forEach(c => {
+      if (c.id > newId) {
+        newId = c.id;
+      }
+    });
+    newCourse.id = newId + 1;
     this.coursesService.postCourse(newCourse).pipe(take(1)).subscribe((course) => {
-      courses.push(course)
-      patchState({courses});
+      backupCourses.push(course);
+      patchState({courses: backupCourses});
     });
   }
 
@@ -143,7 +149,7 @@ export class CoursesState {
     const updatedCourse: ICourse = cloneDeep(course);
     updatedCourse.textbooks[index] = textbook;
 
-    this.coursesService.putCourse(updatedCourse);
+    this.coursesService.putCourse(updatedCourse).pipe(take(1)).subscribe(() => {});
   }
 
   @Action(CourseActions.AddTextbook)
@@ -153,12 +159,12 @@ export class CoursesState {
     const newTextbook: ITextbook = {
       author: '',
       title: ''
-    } 
+    };
     const courses = cloneDeep(state.courses);
-    const index = courses.findIndex(c => c.id === courseId)
+    const index = courses.findIndex(c => c.id === courseId);
     const updatedCourse = cloneDeep(courses[index]);
     updatedCourse.textbooks.push(newTextbook);
-    
+
     courses[index] = updatedCourse;
 
     patchState({courses});
@@ -168,22 +174,22 @@ export class CoursesState {
   private RemoveTextbook({ getState, patchState }: StateContext<ICoursesState>, action: CourseActions.RemoveTextbook) {
     const state = getState();
     const { courseId, index } = action.payload;
-     
+
     const courses = cloneDeep(state.courses);
     const courseIndex = courses.findIndex(c => c.id === courseId);
     const updatedCourse = cloneDeep(courses[courseIndex]);
     updatedCourse.textbooks.splice(index, 1);
-    
+
     courses[courseIndex] = updatedCourse;
 
     patchState({courses});
   }
 
   @Action(CourseActions.DeleteCourse)
-  private DeleteCourse({ getState, patchState }: StateContext<ICoursesState>, action: CourseActions.DeleteCourse) {    
+  private DeleteCourse({ getState, patchState }: StateContext<ICoursesState>, action: CourseActions.DeleteCourse) {
     const state = getState();
     const courseId = action.payload;
-     
+
     const courses = cloneDeep(state.courses);
     const courseIndex = courses.findIndex(c => c.id === courseId);
     courses.splice(courseIndex, 1);
