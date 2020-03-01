@@ -10,6 +10,7 @@ import { CoursesStateService } from 'src/app/services/ngxs/courses/courses.servi
 export class CourseEditorComponent implements OnInit {
 
   @Input() course: ICourse;
+  @Input() index: number;
   constructor(
     private courseStateService: CoursesStateService
   ) { }
@@ -26,7 +27,7 @@ export class CourseEditorComponent implements OnInit {
   }
 
   textChange(value: string, key: string) {
-    this.courseStateService.changeCourse(this.course, value, key);
+    this.courseStateService.changeCourse(this.course, value, key, this.index);
   }
 
   restoreCourse() {

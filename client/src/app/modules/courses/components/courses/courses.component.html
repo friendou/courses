@@ -1,5 +1,5 @@
 <div>
-  <app-course-editor *ngFor="let course of courses$ | async" [course]="course"></app-course-editor>
+  <app-course-editor *ngFor="let course of (courses$ | async); let i = index;" [course]="course" [index]="i"></app-course-editor>
   <div class="add-course-button-container">   
     <button mat-raised-button class="add-course" color="primary" (click)="addCourse()">Add course</button>
   </div>
