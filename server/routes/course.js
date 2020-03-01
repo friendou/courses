@@ -49,7 +49,7 @@ router.put('/:id', async (req, res) => {
 
 router.delete('/:id', async (req, res) => {
     try {
-        const removedPost = await Course.remove({ id: req.params.id })
+        const removedPost = await Course.deleteOne({ id: req.params.id })
         res.json(removedPost);
     } catch(e) {
         res.json({message: e});
