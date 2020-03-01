@@ -61,7 +61,7 @@ describe('TextbookEditorComponent', () => {
 
     component.discardChangesToTextbook();
 
-    expect(mockCourseStateService.restoreCourse).toHaveBeenCalledWith(testId, testIndex);
+    expect(mockCourseStateService.restoreTextbook).toHaveBeenCalledWith(testId, testIndex);
   });
 
   it('should call CourseStateService removeTextbook when function deleteTextbook is called', () => {
