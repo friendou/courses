@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, SimpleChanges, OnChanges } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { ITextbook } from '../../models/ITextbook';
 import { CoursesStateService } from 'src/app/services/ngxs/courses/courses.service';
 
@@ -7,16 +7,13 @@ import { CoursesStateService } from 'src/app/services/ngxs/courses/courses.servi
   templateUrl: './textbook-editor.component.html',
   styleUrls: ['./textbook-editor.component.scss']
 })
-export class TextbookEditorComponent implements OnInit {
+export class TextbookEditorComponent {
 
   @Input() textbook: ITextbook;
   @Input() index: number;
   @Input() courseId: number;
 
   constructor(private courseStateService: CoursesStateService) { }
-
-  ngOnInit(): void {
-  }
 
   textChange(value: string, key: string) {
     this.courseStateService.changeTextbook(this.courseId, this.textbook.author, value, key);
